@@ -1,0 +1,185 @@
+#Create an index
+
+// Replace index_name with the desired name for the index
+// settings allows you to configure the number of primary shards and replicas for the index
+// mappings defines the data types and properties for the fields in the index
+// Replace field1, field2 and types with your actual field names and types as needed
+
+PUT /index_name
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 2
+  },
+  "mappings": {
+    "properties": {
+      "field1": { "type": "text" },
+      "field2": { "type": "keyword" }
+      // Add more fields and types as needed
+    }
+  }
+}
+
+#Delete an index
+
+// Replace index_name with the name of the index you want to remove
+
+DELETE /index_name
+
+
+#Create a document in an index
+
+// Replace index_name with the desired index you wish to create a document in
+// Replace field1, field2 with your actual field names and their corresponding values
+
+POST /index_name/_doc
+{
+  "field1": "value1",
+  "field2": "value2"
+  // Add more fields and values as needed
+}
+
+
+#Delete the document in an index
+
+// Replace index_name with the name of the index and document_id with the ID of the document you want to delete
+// Ensure that the index name and document ID are correct as this action will permanently remove the specified document 
+// from the index
+
+DELETE /index_name/_doc/document_id
+
+
+#Update a document
+
+// Replace index_name with the name of the index and document_id with the ID of the document
+// Replace field1 and field2 with the actual field names you want to update with corresponding values
+
+POST /index_name/_doc/document_id/_update
+{
+  "doc": {
+    "field1": "new_value1",
+    "field2": "new_value2"
+    // Add more fields and values as needed
+  }
+}
+
+
+#Create a field in a document
+// In elasticsearch you don't explicitly create a field in a document using a query. Instead
+// fields are automatically created when you index a document that contains those fields. If 
+// you want to add a new field to an existing document, you would update the document by
+// reindexing it with the new field.
+
+// Replace index_name with the name of the index and document_id with the ID of the document
+
+POST /index_name/_doc/document_id/_update
+{
+  "doc": {
+    "new_field": "new_value"
+  }
+}
+
+
+#Delete a field from a document
+// In elasticsearch, you cannot directly delete a specific field from a document. Instead,
+// you need to update the document by reindexing it without the field you want to delete.
+
+// Replace index_name with the name of the index and document_id with the ID of the document
+// The script section contains an inline script that removes the specified field (field_to_delete) from the 
+// document using the ctx._source.remove() method.
+
+POST /index_name/_doc/document_id/_update
+{
+  "script": {
+    "source": "ctx._source.remove('field_to_delete')"
+  }
+}
+
+
+#Update a field in a document
+
+// Replace index_name with the name of the index and document_id with the ID of the document
+// The script section contains an inline script that updates the specified field (field_to_update) with the 
+// new value (new_value)
+
+POST /index_name/_doc/document_id/_update
+{
+  "script": {
+    "source": "ctx._source.field_to_update = 'new_value'"
+  }
+}
+
+
+#Create an element in an object field in a document
+
+// Replace index_name with the name of the index and document_id with the ID of the document
+// The script section contains an inline script that adds a new element to the object field
+// (object_field) in the document. The 'params' section defines the new element as an object
+// with its own sub-fields.
+
+POST /index_name/_doc/document_id/_update
+{
+  "script": {
+    "source": "ctx._source.object_field.add(params.new_element)",
+    "params": {
+      "new_element": {
+        "sub_field1": "value1",
+        "sub_field2": "value2"
+      }
+    }
+  }
+}
+
+
+#Delete an element in an object field from a document
+
+// Replace index_name with the name of the index and document_id with the ID of the document
+// The script section contains an inline script written in Painless scripting language.
+// The script removes an element from the object field (object_field) based on a condition.
+// In this case the condition checks if the 'sub_field1' of the element matches a specific 
+// value (value_to_match) 
+
+POST /index_name/_doc/document_id/_update
+{
+  "script": {
+    "source": "ctx._source.object_field.removeIf(elem -> elem.sub_field1 == 'value_to_match')",
+    "lang": "painless"
+  }
+}
+
+
+#Update an element in an object field in a document
+
+// Replace index_name with the name of the index and document_id with the ID of the document
+// The script section contains an inline script written in Painless scripting language.
+// The script iterates through the elements in the object field (object_field) and updates
+// the 'sub_field2' of an element if the 'sub_field1' matches a specific value (value_to_match)
+
+POST /index_name/_doc/document_id/_update
+{
+  "script": {
+    "source": "for (item in ctx._source.object_field) { if (item.sub_field1 == 'value_to_match') { item.sub_field2 = 'new_value'; } }",
+    "lang": "painless"
+  }
+}
+
+
+#Get full document by id
+
+// Replace index_name with the name of the index and document_id with the ID of the document
+
+GET /index_name/_doc/document_id
+
+
+#Get document by id, but only certain fields
+
+// Replace index_name with the name of the index and document_id with the ID of the document
+// The _source parameter is used to specify the fields you want to include in the response.
+// Replace 'field1' and 'field2' with the names of the fields you want to retrieve.
+
+GET /index_name/_doc/document_id/_source?_source=field1,field2
+
+
+#Get documents by query (combination of must, must not, should, etc)
+
+#Update all documents by query
