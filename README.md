@@ -4,6 +4,6 @@ Save the docker-compose.yml file to a directory and then run the following comma
 ```
 docker-compose up -d
 ```
-Elasticserch should be located via browser at http://localhost:9200/ and Kibana at http://localhost:5601/
+Elasticsearch should be available via browser at http://localhost:9200/ and Kibana at http://localhost:5601/ if the setup was done correctly.
 
 The different types of queries used to practice in Kibana under the Dev Tools tab are listed in the Queries.txt file
