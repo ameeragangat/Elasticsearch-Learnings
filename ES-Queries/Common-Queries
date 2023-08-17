@@ -182,4 +182,128 @@ GET /index_name/_doc/document_id/_source?_source=field1,field2
 
 #Get documents by query (combination of must, must not, should, etc)
 
+// Replace index_name with the name of the index 
+// The 'must' clause ensures that documents must satisfy all of the specified conditions
+// The 'must not' clause excludes documents that match the specified conditions
+// The 'should' clause represents optional conditions and documents that match these conditions
+// will be given a higher score.
+// With each clause, you can use various query types like 'match', 'term', 'range' etc. to 
+// define the conditions
+
+GET /index_name/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "field1": "must_match_value" } }
+      ],
+      "must_not": [
+        { "term": { "field2": "must_not_match_value" } }
+      ],
+      "should": [
+        { "match": { "field3": "should_match_value1" } }
+      ],
+    }
+  }
+}
+
+// 'minimum_should_match' parameter is used to control how many of the optional
+// 'should' clauses need to match in order for the query to be successful
+
+GET /index_name/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        { "match": { "field1": "value1" } },
+        { "match": { "field2": "value2" } }
+      ],
+      "minimum_should_match": 1
+    }
+  }
+}
+
+// The minimum_should_match parameter is set to 1 which means that at least one of 
+// the two 'should' clauses needs to match for a document to be considered relevant
+
+
+// Retrieve all documents from an index
+
+GET /index_name/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+
+// Retrieve documents that match a specific field and value
+
+GET /index_name/_search
+{
+  "query": {
+    "match": {
+      "field_name": "desired_value"
+    }
+  }
+}
+
+
+// Retrieve documents that match an exact value in a specific field
+
+GET /index_name/_search
+{
+  "query": {
+    "term": {
+      "field_name": "desired_value"
+    }
+  }
+}
+
+// Retrieve documents within a specified range of values in a field
+
+GET /index_name/_search
+{
+  "query": {
+    "range": {
+      "numeric_field": {
+        "gte": 10,
+        "lte": 100
+      }
+    }
+  }
+}
+
+// Combine multiple queries using boolean logic (AND,OR,NOT)
+
+GET /index_name/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "field1": "value1" } },
+        { "range": { "numeric_field": { "gte": 10 } } }
+      ]
+    }
+  }
+}
+
 #Update all documents by query
+
+// First, all documents need to be retrieved from the index using a 'match_all' search query.
+// After retrieving the documents, you can create a set of bulk update requests.
+// Each bulk update request should specify the update and the new data you want to set
+
+POST /index_name/_search
+{
+  "size": 100,  // The max number of documents to retrieve can be specified
+  "query": {
+    "match_all": {}
+  }
+}
+
+// Replace index_name with the name of the index and document_id with the ID of the document
+
+POST /_bulk
+{ "update": { "_index": "index_name", "_id": "document_id" } }
+{ "doc": { "field_to_update": "new_value" } }
