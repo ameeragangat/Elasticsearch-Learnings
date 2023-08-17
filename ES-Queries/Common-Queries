@@ -209,6 +209,7 @@ GET /index_name/_search
 
 // 'minimum_should_match' parameter is used to control how many of the optional
 // 'should' clauses need to match in order for the query to be successful
+// Can be ommitted
 
 GET /index_name/_search
 {
@@ -259,6 +260,23 @@ GET /index_name/_search
     }
   }
 }
+
+// THe 'filter' clause is used to specify conditions that must be satisfied by the documents
+// similar to a 'must' clause but without affecting the relevance score.
+
+GET /index_name/_search
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "term": {
+          "field_name": "desired_value"
+        }
+      }
+    }
+  }
+}
+
 
 // Retrieve documents within a specified range of values in a field
 
