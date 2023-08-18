@@ -325,3 +325,35 @@ POST /index_name/_search
 POST /_bulk
 { "update": { "_index": "index_name", "_id": "document_id" } }
 { "doc": { "field_to_update": "new_value" } }
+
+#Count the number of documents that match a specific query
+
+// Replace 'field_name' with the actual field name you want to query and provide the 'desired_value'
+// you want to match
+
+GET /index_name/_count
+{
+  "query": {
+    "match": {
+      "field_name": "desired_value"
+    }
+  }
+}
+
+// Get multiple documents in one request
+
+POST /index_name/_mget
+{
+  "docs": [
+    {
+      "_id": "document_id1"
+    },
+    {
+      "_id": "document_id2"
+    },
+    {
+      "_id": "document_id3"
+    }
+    // Add more documents as needed
+  ]
+}
