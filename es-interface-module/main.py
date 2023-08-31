@@ -1,18 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-###############################################################################
-# SKA South Africa (http://ska.ac.za/)                                        #
-# Author: agangat@sarao.ac.za                                                 #
-# Copyright @ <2023> SKA SA. All rights reserved.                             #
-# This script contains a ElasticSearch python interface module with various   #
-# common queries methods                                                      #
-#                                                                             #
-# THIS SOFTWARE MAY NOT BE COPIED OR DISTRIBUTED IN ANY FORM WITHOUT THE      #
-# WRITTEN PERMISSION OF SKA SA.                                               #
-###############################################################################
 """
+This script contains a ElasticSearch python interface module with various common
+queries methods
+
 reference: https://www.elastic.co/guide/en/elasticsearch/client/python-api/7.16/overview.html
 
+@author: ameeragangat
 """
 #imports
 from elasticsearch import Elasticsearch
